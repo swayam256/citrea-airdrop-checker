@@ -1,38 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Citrea Airdrop Checker</title>
+<title>Citrea Reward Checker</title>
 <style>
 body{
 margin:0;
-padding:0;
 font-family:Arial;
-background:linear-gradient(135deg,#1a001f,#3d0066,#5a00a8);
+background:linear-gradient(135deg,#090014,#220033,#4b0082);
 color:white;
 text-align:center;
-padding-top:80px;
+padding:40px;
 }
-.box{
-background:rgba(255,255,255,0.08);
-width:420px;
+.container{
+max-width:500px;
 margin:auto;
+background:rgba(255,255,255,0.07);
 padding:30px;
-border-radius:18px;
-box-shadow:0 0 20px rgba(255,255,255,0.1);
+border-radius:20px;
+box-shadow:0 0 25px rgba(168,85,247,.35);
+backdrop-filter:blur(10px);
+}
+h1{
+color:#d8b4fe;
 }
 input{
 width:90%;
 padding:14px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 font-size:16px;
 margin-top:15px;
 }
 button{
 margin-top:15px;
-padding:14px 30px;
+padding:14px 28px;
 border:none;
-border-radius:10px;
+border-radius:12px;
 background:#a855f7;
 color:white;
 font-size:16px;
@@ -41,47 +44,67 @@ cursor:pointer;
 button:hover{
 background:#9333ea;
 }
-#result{
+.result{
 margin-top:25px;
-font-size:22px;
-font-weight:bold;
+text-align:left;
+line-height:1.8;
+background:rgba(255,255,255,0.05);
+padding:18px;
+border-radius:15px;
 }
-.small{
-font-size:13px;
-opacity:0.8;
+.footer{
 margin-top:20px;
+font-size:12px;
+opacity:0.7;
 }
 </style>
 </head>
 <body>
 
-<div class="box">
-<h1>🟣 Citrea Airdrop Checker</h1>
-<p>Check your estimated CTR rewards</p>
+<div class="container">
+<h1>🟣 Citrea Reward Checker</h1>
+<p>Check your ecosystem contribution score</p>
 
-<input type="text" id="wallet" placeholder="Enter wallet address">
-
+<input type="text" id="wallet" placeholder="Enter Wallet Address">
 <br>
-<button onclick="check()">Check Now</button>
+<button onclick="check()">Analyze Wallet</button>
 
-<div id="result"></div>
+<div class="result" id="result"></div>
 
-<p class="small">Unofficial fan-made checker for fun only.</p>
+<div class="footer">
+Unofficial Fan Dashboard • For Fun Only
+</div>
 </div>
 
 <script>
 function check(){
-let wallet=document.getElementById("wallet").value;
+let w=document.getElementById("wallet").value;
 
-if(wallet==""){
+if(w==""){
 document.getElementById("result").innerHTML="⚠️ Enter wallet first";
 return;
 }
 
-let reward=(wallet.length*137)%5000+500;
+let t=(w.length*7)%100;
+let m=(w.length*13)%100;
+let d=(w.length*17)%100;
+let r=(w.length*3)%5;
+
+let tier="Bronze";
+if(t+m+d>180) tier="Diamond 💎";
+else if(t+m+d>140) tier="Platinum 🏆";
+else if(t+m+d>100) tier="Gold 🥇";
+
+let reward=(t+m+d)*17;
 
 document.getElementById("result").innerHTML=
-"🎉 Estimated Allocation: "+reward+" CTR";
+"✅ Wallet Detected<br><br>"+
+"🧪 Testnet Score: "+t+"<br>"+
+"🌐 Mainnet Activity: "+m+"<br>"+
+"⚙️ Devnet Score: "+d+"<br>"+
+"🎭 Discord Roles: "+r+" Holder<br><br>"+
+"🏅 Tier: "+tier+"<br>"+
+"🎁 Estimated Rewards: "+reward+" CTR";
 }
 </script>
 

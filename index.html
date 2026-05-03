@@ -5,36 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Citrea Reward Checker</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#2b0a44,#0b0615 55%,#000);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}.bg{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:30px 30px;animation:move 12s linear infinite}@keyframes move{from{transform:translateY(0)}to{transform:translateY(30px)}}.btc{position:fixed;font-size:24px;opacity:.08;animation:float 10s linear infinite}.btc:nth-child(2){left:10%;top:15%}.btc:nth-child(3){left:80%;top:20%;animation-duration:14s}.btc:nth-child(4){left:20%;top:75%;animation-duration:18s}.btc:nth-child(5){left:75%;top:70%;animation-duration:12s}@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-20px)}100%{transform:translateY(0)}}.card{position:relative;z-index:2;max-width:560px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);padding:28px;border-radius:24px;box-shadow:0 0 40px rgba(168,85,247,.25)}.logo{width:72px;height:72px;border-radius:50%;margin:auto;background:conic-gradient(#a855f7,#fff,#a855f7);display:flex;align-items:center;justify-content:center;animation:spin 6s linear infinite}.logo span{width:58px;height:58px;border-radius:50%;background:#13071f;display:flex;align-items:center;justify-content:center;font-size:28px}.logoText{text-align:center;font-size:30px;font-weight:700;margin:10px 0 4px;color:#d8b4fe}@keyframes spin{to{transform:rotate(360deg)}}p{text-align:center;opacity:.8}input{width:100%;padding:14px;border:none;border-radius:14px;margin-top:16px;background:#fff;color:#111}button{width:100%;padding:14px;margin-top:14px;border:none;border-radius:14px;background:linear-gradient(90deg,#9333ea,#c084fc);color:#fff;font-weight:700;cursor:pointer}.scan{display:none;height:10px;background:rgba(255,255,255,.08);border-radius:20px;margin-top:18px;overflow:hidden}.bar{height:100%;width:20%;background:linear-gradient(90deg,#fff,#a855f7);animation:scan 1s linear infinite}@keyframes scan{from{transform:translateX(-120%)}to{transform:translateX(520%)}}.result{display:none;margin-top:18px;padding:18px;border-radius:18px;background:rgba(255,255,255,.05);line-height:1.8}.tag{display:inline-block;padding:4px 10px;border-radius:999px;background:#a855f733;margin:4px 4px 0 0}.foot{text-align:center;font-size:12px;opacity:.65;margin-top:14px}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top right,#6b2d00,#1a120b 28%,#090909 70%,#000);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.wrap{max-width:560px;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,153,0,.18);border-radius:26px;padding:28px;box-shadow:0 0 40px rgba(255,140,0,.18)}.brand{display:flex;align-items:center;gap:12px;font-size:38px;font-weight:800;margin-bottom:18px}.logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#fff,#cfcfcf);display:grid;place-items:center;color:#111;font-weight:900}.sub{opacity:.78;margin-bottom:16px}.input,select,button{width:100%;padding:15px;border-radius:14px;border:none;font-size:16px}.input,select{background:#fff;color:#111;margin-top:12px}button{margin-top:14px;background:linear-gradient(90deg,#ff6a00,#ffb347);color:#111;font-weight:800;cursor:pointer}.scan{display:none;height:8px;background:rgba(255,255,255,.08);border-radius:20px;margin-top:18px;overflow:hidden}.bar{height:100%;width:30%;background:linear-gradient(90deg,#fff,#ff9900);animation:scan 1s linear infinite}@keyframes scan{from{transform:translateX(-130%)}to{transform:translateX(420%)}}.result{display:none;margin-top:18px;background:rgba(255,255,255,.04);padding:18px;border-radius:18px;line-height:1.9}.foot{font-size:12px;opacity:.62;text-align:center;margin-top:14px}
 </style>
 </head>
 <body>
-<div class='bg'></div><div class='btc'>₿</div><div class='btc'>₿</div><div class='btc'>₿</div><div class='btc'>₿</div>
-<div class='card'>
-<div class='logo'><span>🟣</span></div>
-<div class='logoText'>Citrea Checker</div>
-<p>Scan wallet activity across Testnet • Mainnet • Devnet • Discord</p>
-<input id='wallet' placeholder='Enter wallet address'>
-<select id='role' style='width:100%;padding:14px;border:none;border-radius:14px;margin-top:12px;background:#fff;color:#111'><option>None</option><option>CC</option><option>OG</option><option>Citreans</option><option>Bappers</option></select>
-<button onclick='runScan()'>Analyze Wallet</button>
+<div class='wrap'>
+<div class='brand'><div class='logo'>⬢</div><div>Citrea</div></div>
+<div class='sub'>Check wallet activity across Testnet • Mainnet • Discord</div>
+<input id='wallet' class='input' placeholder='Enter wallet address'>
+<select id='role'><option>None</option><option>CC</option><option>OG</option><option>Citreans</option><option>Bappers</option></select>
+<button onclick='runScan()'>ELIGIBILITY CHECK</button>
 <div class='scan' id='scan'><div class='bar'></div></div>
 <div class='result' id='result'></div>
-<div class='foot'>Unofficial fan-made dashboard • For fun only</div>
+<div class='foot'>Unofficial community checker • Estimated values only</div>
 </div>
 <script>
-async function fetchJson(url){const r=await fetch(url); if(!r.ok) throw new Error('API'); return await r.json();}
-async function runScan(){const w=document.getElementById('wallet').value.trim();const scan=document.getElementById('scan');const res=document.getElementById('result');if(!w){res.style.display='block';res.innerHTML='⚠️ Enter wallet first';return;}const role=(document.getElementById('role')?.value)||'None';scan.style.display='block';res.style.display='none';try{
-const main=await fetchJson('https://api.citreascan.com/api/v2/addresses/'+w);
-let testTx=0;try{const test=await fetchJson('https://api.testnet.citreascan.com/api/v2/addresses/'+w);testTx=parseInt(test?.transactions_count||test?.tx_count||0);}catch(e){}
-const tx=parseInt(main?.transactions_count||main?.tx_count||0);
-const bal=main?.coin_balance||main?.balance||0;
-const contracts=Math.max(1,Math.floor(tx/5));
-let bonus=0;if(role==='CC')bonus=150;else if(role==='OG')bonus=100;else if(role==='Citreans')bonus=60;else if(role==='Bappers')bonus=40;
-const score=tx+testTx+contracts*5+bonus;
-let tier='Bronze';if(score>250)tier='Diamond 💎';else if(score>160)tier='Platinum 🏆';else if(score>90)tier='Gold 🥇';
-const reward=1000+score*18;
-scan.style.display='none';res.style.display='block';res.innerHTML='✅ Wallet Detected<br>🧪 Testnet Score: '+testTx+'<br>🌐 Mainnet Score: '+tx+'<br>⚙️ Contracts Used: '+contracts+'<br>💰 Balance: '+bal+'<br>🎭 Discord Role: '+role+'<br><br>🏅 Tier: '+tier+'<br>🎁 Estimated Rewards: '+reward+' CTR<br>🚀 Claim Chance: Very High';
-}catch(err){scan.style.display='none';res.style.display='block';res.innerHTML='❌ Unable to fetch live data right now. Try again later.';}}
+async function getJson(u){const r=await fetch(u);if(!r.ok)throw new Error();return await r.json();}
+async function runScan(){const w=document.getElementById('wallet').value.trim();const role=document.getElementById('role').value;const s=document.getElementById('scan');const r=document.getElementById('result');if(!w){r.style.display='block';r.innerHTML='⚠️ Enter wallet first';return;}s.style.display='block';r.style.display='none';try{const main=await getJson('https://api.citreascan.com/api/v2/addresses/'+w);let testTx=0;try{const test=await getJson('https://api.testnet.citreascan.com/api/v2/addresses/'+w);testTx=parseInt(test.transactions_count||0);}catch(e){}const mainTx=parseInt(main.transactions_count||0);const bal=parseFloat(main.coin_balance||0);const contracts=Math.max(1,Math.floor(mainTx/4));let bonus=0;if(role==='CC')bonus=160;else if(role==='OG')bonus=110;else if(role==='Citreans')bonus=70;else if(role==='Bappers')bonus=40;const score=mainTx+testTx+(contracts*6)+Math.floor(bal*10)+bonus;const alloc=(1200+score*19).toLocaleString();s.style.display='none';r.style.display='block';r.innerHTML='🧪 Testnet Score: '+testTx+'<br>🌐 Mainnet Score: '+mainTx+'<br>⚙️ Contracts Used: '+contracts+'<br>🎭 Discord Role: '+role+(role==='CC'?' 👑':'')+'<br><br>🎁 Expected Allocation: '+alloc+' $CTR';}catch(e){s.style.display='none';r.style.display='block';r.innerHTML='❌ Unable to fetch wallet data right now.';}}
 </script>
-<style>.brand{position:fixed;top:18px;left:22px;z-index:5;font-weight:800;letter-spacing:3px;color:#f5d0fe;font-size:28px;text-shadow:0 0 12px rgba(168,85,247,.8)}.watermark{position:fixed;right:-60px;bottom:-30px;font-size:220px;opacity:.04;transform:rotate(-18deg);z-index:0;font-weight:900}.subbrand{font-size:11px;letter-spacing:2px;opacity:.7}</style><div class='brand'>CITREA<div class='subbrand'>BITCOIN SECURITY AT SCALE</div></div><div class='watermark'>🟣</div></body>
+</body>
 </html>

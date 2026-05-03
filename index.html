@@ -1,112 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Citrea Reward Checker</title>
 <style>
-body{
-margin:0;
-font-family:Arial;
-background:linear-gradient(135deg,#090014,#220033,#4b0082);
-color:white;
-text-align:center;
-padding:40px;
-}
-.container{
-max-width:500px;
-margin:auto;
-background:rgba(255,255,255,0.07);
-padding:30px;
-border-radius:20px;
-box-shadow:0 0 25px rgba(168,85,247,.35);
-backdrop-filter:blur(10px);
-}
-h1{
-color:#d8b4fe;
-}
-input{
-width:90%;
-padding:14px;
-border:none;
-border-radius:12px;
-font-size:16px;
-margin-top:15px;
-}
-button{
-margin-top:15px;
-padding:14px 28px;
-border:none;
-border-radius:12px;
-background:#a855f7;
-color:white;
-font-size:16px;
-cursor:pointer;
-}
-button:hover{
-background:#9333ea;
-}
-.result{
-margin-top:25px;
-text-align:left;
-line-height:1.8;
-background:rgba(255,255,255,0.05);
-padding:18px;
-border-radius:15px;
-}
-.footer{
-margin-top:20px;
-font-size:12px;
-opacity:0.7;
-}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top,#2b0a44,#0b0615 55%,#000);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;overflow:hidden}.bg{position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.03) 1px,transparent 1px);background-size:30px 30px;animation:move 12s linear infinite}@keyframes move{from{transform:translateY(0)}to{transform:translateY(30px)}}.btc{position:fixed;font-size:24px;opacity:.08;animation:float 10s linear infinite}.btc:nth-child(2){left:10%;top:15%}.btc:nth-child(3){left:80%;top:20%;animation-duration:14s}.btc:nth-child(4){left:20%;top:75%;animation-duration:18s}.btc:nth-child(5){left:75%;top:70%;animation-duration:12s}@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-20px)}100%{transform:translateY(0)}}.card{position:relative;z-index:2;max-width:560px;width:100%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(10px);padding:28px;border-radius:24px;box-shadow:0 0 40px rgba(168,85,247,.25)}.logo{width:72px;height:72px;border-radius:50%;margin:auto;background:conic-gradient(#a855f7,#fff,#a855f7);display:flex;align-items:center;justify-content:center;animation:spin 6s linear infinite}.logo span{width:58px;height:58px;border-radius:50%;background:#13071f;display:flex;align-items:center;justify-content:center;font-size:28px}.logoText{text-align:center;font-size:30px;font-weight:700;margin:10px 0 4px;color:#d8b4fe}@keyframes spin{to{transform:rotate(360deg)}}p{text-align:center;opacity:.8}input{width:100%;padding:14px;border:none;border-radius:14px;margin-top:16px;background:#fff;color:#111}button{width:100%;padding:14px;margin-top:14px;border:none;border-radius:14px;background:linear-gradient(90deg,#9333ea,#c084fc);color:#fff;font-weight:700;cursor:pointer}.scan{display:none;height:10px;background:rgba(255,255,255,.08);border-radius:20px;margin-top:18px;overflow:hidden}.bar{height:100%;width:20%;background:linear-gradient(90deg,#fff,#a855f7);animation:scan 1s linear infinite}@keyframes scan{from{transform:translateX(-120%)}to{transform:translateX(520%)}}.result{display:none;margin-top:18px;padding:18px;border-radius:18px;background:rgba(255,255,255,.05);line-height:1.8}.tag{display:inline-block;padding:4px 10px;border-radius:999px;background:#a855f733;margin:4px 4px 0 0}.foot{text-align:center;font-size:12px;opacity:.65;margin-top:14px}
 </style>
 </head>
 <body>
-
-<div class="container">
-<h1>🟣 Citrea Reward Checker</h1>
-<p>Check your ecosystem contribution score</p>
-
-<input type="text" id="wallet" placeholder="Enter Wallet Address">
-<br>
-<button onclick="check()">Analyze Wallet</button>
-
-<div class="result" id="result"></div>
-
-<div class="footer">
-Unofficial Fan Dashboard • For Fun Only
+<div class='bg'></div><div class='btc'>₿</div><div class='btc'>₿</div><div class='btc'>₿</div><div class='btc'>₿</div>
+<div class='card'>
+<div class='logo'><span>🟣</span></div>
+<div class='logoText'>Citrea Checker</div>
+<p>Scan wallet activity across Testnet • Mainnet • Devnet • Discord</p>
+<input id='wallet' placeholder='Enter wallet address'>
+<button onclick='runScan()'>Analyze Wallet</button>
+<div class='scan' id='scan'><div class='bar'></div></div>
+<div class='result' id='result'></div>
+<div class='foot'>Unofficial fan-made dashboard • For fun only</div>
 </div>
-</div>
-
 <script>
-function check(){
-let w=document.getElementById("wallet").value;
-
-if(w==""){
-document.getElementById("result").innerHTML="⚠️ Enter wallet first";
-return;
-}
-
-let t=(w.length*7)%100;
-let m=(w.length*13)%100;
-let d=(w.length*17)%100;
-let r=(w.length*3)%5;
-
-let tier="Bronze";
-if(t+m+d>180) tier="Diamond 💎";
-else if(t+m+d>140) tier="Platinum 🏆";
-else if(t+m+d>100) tier="Gold 🥇";
-
-let reward=(t+m+d)*17;
-
-document.getElementById("result").innerHTML=
-"✅ Wallet Detected<br><br>"+
-"🧪 Testnet Score: "+t+"<br>"+
-"🌐 Mainnet Activity: "+m+"<br>"+
-"⚙️ Devnet Score: "+d+"<br>"+
-"🎭 Discord Roles: "+r+" Holder<br><br>"+
-"🏅 Tier: "+tier+"<br>"+
-"🎁 Estimated Rewards: "+reward+" CTR";
-}
+function runScan(){const w=document.getElementById('wallet').value.trim();const scan=document.getElementById('scan');const res=document.getElementById('result');if(!w){res.style.display='block';res.innerHTML='⚠️ Enter wallet first';return;}scan.style.display='block';res.style.display='none';setTimeout(()=>{let t=(w.length*9)%100,m=(w.length*13)%100,d=(w.length*17)%100,roles=(w.length*5)%8+1,total=t+m+d;let tier='Bronze';if(total>210)tier='Diamond 💎';else if(total>160)tier='Platinum 🏆';else if(total>110)tier='Gold 🥇';let reward=1200+total*19;scan.style.display='none';res.style.display='block';res.innerHTML='✅ Wallet Detected<br>🧪 Testnet Score: '+t+'<br>🌐 Mainnet Activity: '+m+'<br>⚙️ Devnet Score: '+d+'<br>🎭 Discord Roles: '+roles+' Holder<br><br><span class="tag">OG</span><span class="tag">Early User</span><span class="tag">BTC Native</span><br><br>🏅 Tier: '+tier+'<br>🎁 Estimated Rewards: '+reward+' CTR<br>🚀 Claim Chance: Very High';},2200)}
 </script>
-
 </body>
 </html>

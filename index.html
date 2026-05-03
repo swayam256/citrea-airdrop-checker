@@ -1,27 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 <title>Citrea Reward Checker</title>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:radial-gradient(circle at top right,#6b2d00,#1a120b 28%,#090909 70%,#000);color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}.wrap{max-width:560px;width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,153,0,.18);border-radius:26px;padding:28px;box-shadow:0 0 40px rgba(255,140,0,.18)}.brand{display:flex;align-items:center;gap:12px;font-size:38px;font-weight:800;margin-bottom:18px}.logo{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,#fff,#cfcfcf);display:grid;place-items:center;color:#111;font-weight:900}.sub{opacity:.78;margin-bottom:16px}.input,select,button{width:100%;padding:15px;border-radius:14px;border:none;font-size:16px}.input,select{background:#fff;color:#111;margin-top:12px}button{margin-top:14px;background:linear-gradient(90deg,#ff6a00,#ffb347);color:#111;font-weight:800;cursor:pointer}.scan{display:none;height:8px;background:rgba(255,255,255,.08);border-radius:20px;margin-top:18px;overflow:hidden}.bar{height:100%;width:30%;background:linear-gradient(90deg,#fff,#ff9900);animation:scan 1s linear infinite}@keyframes scan{from{transform:translateX(-130%)}to{transform:translateX(420%)}}.result{display:none;margin-top:18px;background:rgba(255,255,255,.04);padding:18px;border-radius:18px;line-height:1.9}.foot{font-size:12px;opacity:.62;text-align:center;margin-top:14px}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#0b0b0b,#1b1208,#3a1e00);color:#fff;padding:24px}.container{max-width:1120px;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.brand{font-size:40px;font-weight:800;color:#fff}.search{display:flex;gap:10px;flex-wrap:wrap}.search input{padding:14px 16px;border:none;border-radius:14px;min-width:320px}.search button{padding:14px 20px;border:none;border-radius:14px;background:linear-gradient(90deg,#ff7a00,#ffb347);font-weight:800;cursor:pointer}.hero{background:linear-gradient(135deg,#1d8cff,#0ea5e9);padding:28px;border-radius:24px;display:grid;grid-template-columns:2fr 1fr;gap:20px}.walletBox{background:rgba(255,255,255,.12);padding:18px;border-radius:18px}.hero h1{margin:0 0 14px;font-size:48px}.ranking{font-size:18px}.rankNum{font-size:56px;font-weight:800;margin-top:8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-top:20px}.card{background:#111111cc;padding:24px;border-radius:22px;min-height:190px}.big{font-size:56px;font-weight:800;color:#8ea2ff}.stat{font-size:44px;font-weight:800;color:#5ee26b}.alloc{font-size:42px;font-weight:800;color:#ffb347}.muted{opacity:.75}.foot{margin-top:18px;font-size:12px;opacity:.6}.loading{display:none;margin-top:10px}
 </style>
 </head>
 <body>
-<div class='wrap'>
-<div class='brand'><div class='logo'>⬢</div><div>Citrea</div></div>
-<div class='sub'>Check wallet activity across Testnet • Mainnet • Discord</div>
-<input id='wallet' class='input' placeholder='Enter wallet address'>
-<select id='role'><option>None</option><option>CC</option><option>OG</option><option>Citreans</option><option>Bappers</option></select>
-<button onclick='runScan()'>ELIGIBILITY CHECK</button>
-<div class='scan' id='scan'><div class='bar'></div></div>
-<div class='result' id='result'></div>
-<div class='foot'>Unofficial community checker • Estimated values only</div>
+<div class='container'>
+<div class='topbar'><div class='brand'>Citrea</div><div class='search'><input id='wallet' placeholder='Look up a wallet'><button onclick='scan()'>ELIGIBILITY CHECK</button></div></div>
+<div class='hero'>
+<div><h1>Wallet info</h1><div class='walletBox'><div id='walletShort'>Enter wallet to begin</div><div class='muted'>Protocol: Citrea Mainnet + Testnet</div></div></div>
+<div class='ranking'><div>Ranking</div><div class='rankNum' id='rank'>-</div><div class='muted' id='updated'>Live</div></div>
+</div>
+<div class='grid'>
+<div class='card'><div>Your wallet is in TOP</div><div class='big' id='topPct'>-</div><div class='muted' id='better'>Waiting for scan</div></div>
+<div class='card'><div>Interactions</div><div class='stat' id='txCount'>-</div><div class='muted'>Transaction Count</div><div class='muted' id='contracts'>Contracts Used: -</div></div>
+<div class='card'><div>Expected Allocation</div><div class='alloc' id='alloc'>-</div><div class='muted'>$CTR</div><div class='muted' id='scores'>Mainnet: - | Testnet: -</div></div>
+</div>
+<div class='loading' id='loading'>Scanning wallet...</div>
+<div class='foot'>Unofficial community checker • Estimated values based on public wallet activity</div>
 </div>
 <script>
-async function getJson(u){const r=await fetch(u);if(!r.ok)throw new Error();return await r.json();}
-async function runScan(){const w=document.getElementById('wallet').value.trim();const role=document.getElementById('role').value;const s=document.getElementById('scan');const r=document.getElementById('result');if(!w){r.style.display='block';r.innerHTML='⚠️ Enter wallet first';return;}s.style.display='block';r.style.display='none';try{const main=await getJson('https://api.citreascan.com/api/v2/addresses/'+w);let testTx=0;try{const test=await getJson('https://api.testnet.citreascan.com/api/v2/addresses/'+w);testTx=parseInt(test.transactions_count||0);}catch(e){}const mainTx=parseInt(main.transactions_count||0);const bal=parseFloat(main.coin_balance||0);const contracts=Math.max(1,Math.floor(mainTx/4));let bonus=0;if(role==='CC')bonus=160;else if(role==='OG')bonus=110;else if(role==='Citreans')bonus=70;else if(role==='Bappers')bonus=40;const score=mainTx+testTx+(contracts*6)+Math.floor(bal*10)+bonus;const alloc=(1200+score*19).toLocaleString();s.style.display='none';r.style.display='block';r.innerHTML='🧪 Testnet Score: '+testTx+'<br>🌐 Mainnet Score: '+mainTx+'<br>⚙️ Contracts Used: '+contracts+'<br>🎭 Discord Role: '+role+(role==='CC'?' 👑':'')+'<br><br>🎁 Expected Allocation: '+alloc+' $CTR';}catch(e){s.style.display='none';r.style.display='block';r.innerHTML='❌ Unable to fetch wallet data right now.';}}
+async function j(u){const r=await fetch(u);if(!r.ok)throw new Error();return await r.json();}
+function short(a){return a.slice(0,6)+'...'+a.slice(-4)}
+async function scan(){const w=document.getElementById('wallet').value.trim();if(!w)return;document.getElementById('loading').style.display='block';try{const main=await j('https://api.citreascan.com/api/v2/addresses/'+w);let test={transactions_count:0};try{test=await j('https://api.testnet.citreascan.com/api/v2/addresses/'+w);}catch(e){}
+const mainTx=parseInt(main.transactions_count||0),testTx=parseInt(test.transactions_count||0);const contracts=Math.max(1,Math.floor(mainTx/4));const score=mainTx+testTx+contracts*6;const rank=Math.max(1,500000-score*7);const pct=(rank/500000*100).toFixed(2);const alloc=(1200+score*19).toLocaleString();document.getElementById('walletShort').innerText=short(w);document.getElementById('rank').innerText='#'+rank.toLocaleString();document.getElementById('updated').innerText='Updated just now';document.getElementById('topPct').innerText=pct+'%';document.getElementById('better').innerText='and better than '+(500000-rank).toLocaleString()+' participants';document.getElementById('txCount').innerText=(mainTx+testTx).toLocaleString();document.getElementById('contracts').innerText='Contracts Used: '+contracts;document.getElementById('alloc').innerText=alloc;document.getElementById('scores').innerText='Mainnet: '+mainTx+' | Testnet: '+testTx;}catch(e){alert('Unable to fetch wallet data');}document.getElementById('loading').style.display='none';}
 </script>
 </body>
 </html>

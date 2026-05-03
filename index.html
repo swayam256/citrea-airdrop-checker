@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Citrea Airdrop Checker</title>
+<style>
+body{
+margin:0;
+padding:0;
+font-family:Arial;
+background:linear-gradient(135deg,#1a001f,#3d0066,#5a00a8);
+color:white;
+text-align:center;
+padding-top:80px;
+}
+.box{
+background:rgba(255,255,255,0.08);
+width:420px;
+margin:auto;
+padding:30px;
+border-radius:18px;
+box-shadow:0 0 20px rgba(255,255,255,0.1);
+}
+input{
+width:90%;
+padding:14px;
+border:none;
+border-radius:10px;
+font-size:16px;
+margin-top:15px;
+}
+button{
+margin-top:15px;
+padding:14px 30px;
+border:none;
+border-radius:10px;
+background:#a855f7;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+button:hover{
+background:#9333ea;
+}
+#result{
+margin-top:25px;
+font-size:22px;
+font-weight:bold;
+}
+.small{
+font-size:13px;
+opacity:0.8;
+margin-top:20px;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h1>🟣 Citrea Airdrop Checker</h1>
+<p>Check your estimated CTR rewards</p>
+
+<input type="text" id="wallet" placeholder="Enter wallet address">
+
+<br>
+<button onclick="check()">Check Now</button>
+
+<div id="result"></div>
+
+<p class="small">Unofficial fan-made checker for fun only.</p>
+</div>
+
+<script>
+function check(){
+let wallet=document.getElementById("wallet").value;
+
+if(wallet==""){
+document.getElementById("result").innerHTML="⚠️ Enter wallet first";
+return;
+}
+
+let reward=(wallet.length*137)%5000+500;
+
+document.getElementById("result").innerHTML=
+"🎉 Estimated Allocation: "+reward+" CTR";
+}
+</script>
+
+</body>
+</html>
